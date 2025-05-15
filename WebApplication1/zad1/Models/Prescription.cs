@@ -12,4 +12,7 @@ public class Prescription
     public int IdPatient { get; set; }
     [ForeignKey(nameof(Doctor))]
     public int IdDoctor { get; set; }
+    
+    public Patient Patient { get; set; }
+    public Doctor Doctor { get; set; }
 }

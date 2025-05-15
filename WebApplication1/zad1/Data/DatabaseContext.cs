@@ -37,5 +37,16 @@ public class DatabaseContext : DbContext
             p.Property(e => e.LastName).HasMaxLength(100);
             p.Property(e => e.BirthDate).HasColumnType("date");
         });
+
+        modelBuilder.Entity<Prescription>(pr =>
+        {
+            pr.ToTable("Prescription");
+
+            pr.HasKey(e => e.IdPrescription);
+            pr.Property(e => e.Date).HasColumnType("date");
+            pr.Property(e => e.DueDate).HasColumnType("date");
+            pr.Property(e => e.IdPatient);
+            pr.Property(e => e.IdDoctor);
+        });
     }
 }
