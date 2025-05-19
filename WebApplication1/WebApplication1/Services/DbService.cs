@@ -15,7 +15,7 @@ public class DbService : IDbService
         _context = context;
     }
 
-    public async Task AddPrescription(NewPrescriptionDTO prescription)
+    public async Task AddPrescription(NewPrescriptionDto prescription)
     {
         var doctor = await _context.Doctors
             .Where(p => p.IdDoctor == prescription.Doctor.IdDoctor).ToListAsync();
@@ -81,12 +81,60 @@ public class DbService : IDbService
             }
 
             await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
         catch (Exception e)
         {
             await transaction.RollbackAsync();
             throw;
         }
+    }
 
+    public async Task<GetPatientDto> GetPatient(int id)
+    {
+        var patient = await _context.Patients
+            .Where(p => p.IdPatient == id)
+            .Include(p => p.Prescriptions)
+                .ThenInclude(pr => pr.PrescriptionMedicaments)
+                    .ThenInclude(pm => pm.Medicament)
+            .Include(p => p.Prescriptions)
+                .ThenInclude(pr => pr.Doctor)
+            .FirstOrDefaultAsync();
+
+        if (patient == null)
+        {
+            throw new NotFoundException("Patient not found");
+        }
+
+        var result = new GetPatientDto()
+        {
+            IdPatient = patient.IdPatient,
+            FirstName = patient.FirstName,
+            LastName = patient.LastName,
+            BirthDate = patient.BirthDate,
+            Prescriptions = patient.Prescriptions
+                .OrderBy(pr => pr.DueDate)
+                .Select(pr => new GetPrescriptionDto()
+                {
+                    IdPrescription = pr.IdPrescription,
+                    Date = pr.Date,
+                    DueDate = pr.DueDate,
+                    Medicaments = pr.PrescriptionMedicaments
+                        .Select(pm => new GetMedicamentDto()
+                        {
+                            IdMedicament = pm.IdMedicament,
+                            Name = pm.Medicament.Name,
+                            Dose = pm.Dose,
+                            Description = pm.Details
+                        }).ToList(),
+                    Doctor = new GetDoctorDto()
+                    {
+                        IdDoctor = pr.IdDoctor,
+                        FirstName = pr.Doctor.FirstName
+                    }
+                }).ToList()
+        };
+        
+        return result;
     }
 }

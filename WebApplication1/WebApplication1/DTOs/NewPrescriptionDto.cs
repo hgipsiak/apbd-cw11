@@ -2,16 +2,16 @@
 
 namespace zad1.DTOs;
 
-public class NewPrescriptionDTO
+public class NewPrescriptionDto
 {
-    public PatientDTO Patient { get; set; }
-    public DoctorDTO Doctor { get; set; }
-    public List<MedicamentDTO> Medicaments { get; set; }
+    public PatientDto Patient { get; set; }
+    public DoctorDto Doctor { get; set; }
+    public List<MedicamentDto> Medicaments { get; set; }
     public DateTime Date { get; set; }
     public DateTime DueDate { get; set; }
 }
 
-public class PatientDTO
+public class PatientDto
 {
     public int IdPatient { get; set; }
     public string FirstName { get; set; }
@@ -19,14 +19,14 @@ public class PatientDTO
     public DateTime BirthDate { get; set; }
 }
 
-public class MedicamentDTO
+public class MedicamentDto
 {
     public int IdMedicament { get; set; }
     public int? Dose { get; set; }
     public string Details { get; set; }
 }
 
-public class DoctorDTO
+public class DoctorDto
 {
     public int IdDoctor { get; set; }
     public string FirstName { get; set; }

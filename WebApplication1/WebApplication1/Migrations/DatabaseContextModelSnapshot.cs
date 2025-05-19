@@ -22,7 +22,7 @@ namespace zad1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("WebApplication1.Models.Doctor", b =>
+            modelBuilder.Entity("zad1.Models.Doctor", b =>
                 {
                     b.Property<int>("IdDoctor")
                         .ValueGeneratedOnAdd()
@@ -66,7 +66,7 @@ namespace zad1.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Medicament", b =>
+            modelBuilder.Entity("zad1.Models.Medicament", b =>
                 {
                     b.Property<int>("IdMedicament")
                         .ValueGeneratedOnAdd()
@@ -110,7 +110,7 @@ namespace zad1.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Patient", b =>
+            modelBuilder.Entity("zad1.Models.Patient", b =>
                 {
                     b.Property<int>("IdPatient")
                         .ValueGeneratedOnAdd()
@@ -152,7 +152,7 @@ namespace zad1.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Prescription", b =>
+            modelBuilder.Entity("zad1.Models.Prescription", b =>
                 {
                     b.Property<int>("IdPrescription")
                         .ValueGeneratedOnAdd()
@@ -181,7 +181,7 @@ namespace zad1.Migrations
                     b.ToTable("Prescription", (string)null);
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.PrescriptionMedicament", b =>
+            modelBuilder.Entity("zad1.Models.PrescriptionMedicament", b =>
                 {
                     b.Property<int>("IdMedicament")
                         .HasColumnType("int");
@@ -204,16 +204,16 @@ namespace zad1.Migrations
                     b.ToTable("Prescription_Medicament", (string)null);
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Prescription", b =>
+            modelBuilder.Entity("zad1.Models.Prescription", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Doctor", "Doctor")
-                        .WithMany()
+                    b.HasOne("zad1.Models.Doctor", "Doctor")
+                        .WithMany("Prescriptions")
                         .HasForeignKey("IdDoctor")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApplication1.Models.Patient", "Patient")
-                        .WithMany()
+                    b.HasOne("zad1.Models.Patient", "Patient")
+                        .WithMany("Prescriptions")
                         .HasForeignKey("IdPatient")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -223,16 +223,16 @@ namespace zad1.Migrations
                     b.Navigation("Patient");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.PrescriptionMedicament", b =>
+            modelBuilder.Entity("zad1.Models.PrescriptionMedicament", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Medicament", "Medicament")
-                        .WithMany()
+                    b.HasOne("zad1.Models.Medicament", "Medicament")
+                        .WithMany("PrescriptionMedicaments")
                         .HasForeignKey("IdMedicament")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebApplication1.Models.Prescription", "Prescription")
-                        .WithMany()
+                    b.HasOne("zad1.Models.Prescription", "Prescription")
+                        .WithMany("PrescriptionMedicaments")
                         .HasForeignKey("IdPrescription")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -240,6 +240,26 @@ namespace zad1.Migrations
                     b.Navigation("Medicament");
 
                     b.Navigation("Prescription");
+                });
+
+            modelBuilder.Entity("zad1.Models.Doctor", b =>
+                {
+                    b.Navigation("Prescriptions");
+                });
+
+            modelBuilder.Entity("zad1.Models.Medicament", b =>
+                {
+                    b.Navigation("PrescriptionMedicaments");
+                });
+
+            modelBuilder.Entity("zad1.Models.Patient", b =>
+                {
+                    b.Navigation("Prescriptions");
+                });
+
+            modelBuilder.Entity("zad1.Models.Prescription", b =>
+                {
+                    b.Navigation("PrescriptionMedicaments");
                 });
 #pragma warning restore 612, 618
         }

@@ -4,5 +4,7 @@ namespace zad1.Services;
 
 public interface IDbService
 {
-    Task AddPrescription(NewPrescriptionDTO prescription);
+    Task AddPrescription(NewPrescriptionDto prescription);
+    
+    Task<GetPatientDto> GetPatient(int id);
 }

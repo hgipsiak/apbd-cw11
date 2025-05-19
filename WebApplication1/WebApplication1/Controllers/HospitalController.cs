@@ -19,16 +19,30 @@ namespace zad1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPrescription(NewPrescriptionDTO prescription)
+        public async Task<IActionResult> AddPrescription(NewPrescriptionDto prescription)
         {
             try
             {
                 await _dbService.AddPrescription(prescription);
-                return Created();
+                return Created("{id}", prescription);
             }
             catch (BadRequestException e)
             {
                 return BadRequest(e.Message);
+            }
+            catch (NotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPatient(int id)
+        {
+            try
+            {
+                var patient = await _dbService.GetPatient(id);
+                return Ok(patient);
             }
             catch (NotFoundException e)
             {
